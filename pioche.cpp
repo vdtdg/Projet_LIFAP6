@@ -1,8 +1,8 @@
 #include "pioche.hpp"
 
-void pioche_init(Pioche& pioche, int taille_elt) {
-  //... votre code ici
-  std::cout<<"Hello"<<std::endl;
+void pioche_init(Pioche& pioche, int taille_elt)
+{
+
 }
 
 void pioche_defausse(Pioche& pioche, const void* elt) {
@@ -19,5 +19,4 @@ void pioche_melange(Pioche& pioche) {
 
 void pioche_suppr(Pioche& pioche) {
   //... votre code ici
-  std::cout<<"Hello2"<<std::endl;
 }
