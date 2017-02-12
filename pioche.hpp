@@ -3,7 +3,7 @@
 
 //structure de données
 struct Pioche {
-  //... votre code ici
+
 } ;
 
 //initialisation de la pioche.
