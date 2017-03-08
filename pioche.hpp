@@ -1,6 +1,10 @@
 #ifndef ARAIL_PIOCHE_H
 #define ARAIL_PIOCHE_H
 
+#include <cstdlib>
+#include <vector>
+#include <cstring>
+
 //structure de données
 struct Pioche {
   std::vector <char> tas;
