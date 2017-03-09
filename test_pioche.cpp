@@ -1,22 +1,27 @@
 #include "pioche.hpp"
 
 #include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
 
 int main() {
+
+  srand(time(nullptr));
+  
   //nombre de melanges testes
   int ntests = 1000000 ;
   //taille de la pioche
   int taille = 25 ;
 
   Pioche pioche ;
-
+  
   //initialisation de la pioche pour contenir des entiers
   pioche_init(pioche, sizeof(int)) ;
   //remplissage de la pioche
   for(int i = 0; i < taille; ++i) {
     pioche_defausse(pioche, &i) ;
   }
-
   //test de la pioche : combien de fois 0 apparait avant taille-1
   //apres un melange. Devrait etre proche de ntests / 2
   int score = 0 ;
@@ -24,7 +29,11 @@ int main() {
     //iteration sur la pioche
     for(int i = 0; i < taille; ++i) {
       int a ;
+      
+      std::cout << "Je suis arrivé avant la pioche " << std::endl;
       pioche_pioche(pioche, &a) ;
+      
+      std::cout << "Je suis arrivé après avoir pioché" << std::endl;
       pioche_defausse(pioche, &a) ;
       //test si 0 ou taille-1 est trouve
       if(a == 0) {

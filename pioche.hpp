@@ -4,13 +4,14 @@
 #include <cstdlib>
 #include <vector>
 #include <cstring>
+#include <iostream>
 
 //structure de données
-struct Pioche {
+typedef struct sPioche {
   std::vector <char> tas;
   std::vector <char> defausse;
   int taille_elt;
-} ;
+}Pioche ;
 
 //initialisation de la pioche.
 //  - taille_elt est le nombre d'octets necessaires pour stocker une carte
