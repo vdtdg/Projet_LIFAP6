@@ -25,15 +25,13 @@ int main() {
   //test de la pioche : combien de fois 0 apparait avant taille-1
   //apres un melange. Devrait etre proche de ntests / 2
   int score = 0 ;
+  pioche_melange(pioche) ; // ajout
   for(int t = 0; t < ntests; ++t) {
     //iteration sur la pioche
     for(int i = 0; i < taille; ++i) {
       int a ;
       
-      std::cout << "Je suis arrivé avant la pioche " << std::endl;
       pioche_pioche(pioche, &a) ;
-      
-      std::cout << "Je suis arrivé après avoir pioché" << std::endl;
       pioche_defausse(pioche, &a) ;
       //test si 0 ou taille-1 est trouve
       if(a == 0) {
