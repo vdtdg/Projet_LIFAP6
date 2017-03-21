@@ -25,7 +25,7 @@ int main() {
   //test de la pioche : combien de fois 0 apparait avant taille-1
   //apres un melange. Devrait etre proche de ntests / 2
   int score = 0 ;
-  pioche_melange(pioche) ; // ajout
+  
   for(int t = 0; t < ntests; ++t) {
     //iteration sur la pioche
     for(int i = 0; i < taille; ++i) {

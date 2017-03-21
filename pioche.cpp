@@ -8,19 +8,27 @@ void pioche_init(Pioche& pioche, int taille_elt) {
 void pioche_pioche(Pioche& pioche , void* cible) { // O(1)
   //std::cout << "Je piche une carte dans le tas" << std::endl;
   // Index du premier octet du dernier élément du tableau (qui répresente le dessus du tas de carte)
+  if(pioche.tas.size() == 0) { // Si la pioche est vide, on bat les cartes !
+    pioche_melange(pioche);
+  }
+
   int index = pioche.tas.size() - pioche.taille_elt;
+
+  if(index < 0) { // si la pioche est toujours vide
+    std::cout << "Plus de carte en jeu !"<< std::endl;
+    return;
+  }
   
   // Les données sont bien contiguës en mémoire (voir def vector)
   memcpy( cible, &pioche.tas.at(index) , pioche.taille_elt );
   // Suppression de la dernière carte en mémoire, on applique taille_elt fois la méthode pop_back
-  /*for(int i = 0 ; i < pioche.taille_elt ; i++) {
+  for(int i = 0 ; i < pioche.taille_elt ; i++) {
     pioche.tas.pop_back();
-    }*/
+  }
 }
 
 
 void pioche_defausse(Pioche& pioche, const void* carte) { // O(1) en temps amorti car  O(n) si besoin de realloc
-  
   // APPROCHE 'SAFE' DU PB : O(1) ou O(n) si besoin de realloc
   //std::cout << "Je defausse une carte dans la defausse" << std::endl;
   char * temp = new char[pioche.taille_elt];
@@ -37,11 +45,8 @@ void pioche_defausse(Pioche& pioche, const void* carte) { // O(1) en temps amort
 
 
 void pioche_melange(Pioche& pioche) { // O(n)
-  std::cout << "Je vais mélanger la pioche" << std::endl;
   char * temp = new char[pioche.taille_elt];
   
-  char *p = pioche.tas.data(); // pointeur sur le premier element du tableau : c'est pratique, ça permet d'utiliser un vector exactement comme un tableau statique, et ça fait du bien au cerveau.
-
   int j = 0;
    
   // On met la defausse par dessus la pioche -- O(n)
@@ -53,9 +58,8 @@ void pioche_melange(Pioche& pioche) { // O(n)
   // On compte maintenant le nombre d'élément dans le tas
   int nb_elt_tas = pioche.tas.size() / pioche.taille_elt;
 
-
   for (int  i = 0; i < nb_elt_tas; i++) { // O(n) selon cours
-    j = rand() % (nb_elt_tas - (i - 1));
+    j = rand() % (nb_elt_tas - 1 - (i - 1));
     memcpy( (void *) temp, (void *) &pioche.tas.at(j*pioche.taille_elt) , pioche.taille_elt);
       
     memcpy( (void *) &pioche.tas.at(j*pioche.taille_elt), (void *) &pioche.tas.at(i*pioche.taille_elt) , pioche.taille_elt);
