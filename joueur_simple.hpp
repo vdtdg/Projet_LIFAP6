@@ -4,7 +4,12 @@
 #include "jeu.hpp"
 
 struct JoueurSimple {
-  //... votre code ici
+  std::vector <carte> wagons;
+  Objectif obj;
+  int points;
+  int mdp;
+  int indice;
+  
 } ;
 
 //initialisation
