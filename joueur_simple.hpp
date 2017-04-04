@@ -3,15 +3,20 @@
 
 #include "jeu.hpp"
 
-typedef vector<int> liste_liaison;
+typedef std::vector<int> liste_liaison;
 
+struct Couple_fp {
+  int ville;
+  int poids;
+} ;
+  
 struct JoueurSimple {
-  std::vector <carte> wagons;
-  Objectif obj;
+  std::vector <Carte> wagons;
+  Objectif obj; // const ?
   int points;
   int mdp;
   int indice;
-  
+  liste_liaison chemin_obj; // permet de ne pas refaire Dijkstra à chaque tour. Stocke des index de ville
 } ;
 
 // initialisation
@@ -36,6 +41,9 @@ void joueur_simple_tour(Jeu& jeu, JoueurSimple& joueur) ;
 
 // retourne une liste d'index de liaison representant le chemin le plus court
 // entre les points de l'objectif passé en paramètre.
-liste_liaison plus_court_chemin(Jeu& jeu, const Objectif &obj);
+liste_liaison plus_court_chemin(Jeu& jeu, const Objectif &obj, const int indice_joueur);
+
+// Organise les couples<ville, poids> dans la file à priorité
+bool operator<(const Couple_fp& a, const Couple_fp& b); 
 
 #endif
