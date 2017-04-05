@@ -13,7 +13,6 @@ struct Couple_fp {
 struct JoueurSimple {
   std::vector <Carte> wagons;
   Objectif obj; // const ?
-  int points;
   int mdp;
   int indice;
   liste_liaison chemin_obj; // permet de ne pas refaire Dijkstra à chaque tour. Stocke des index de ville

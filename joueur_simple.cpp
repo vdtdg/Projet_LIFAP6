@@ -4,7 +4,6 @@
 #include <iostream> // debuging purpose.
 
 void joueur_simple_init(JoueurSimple& joueur) {
-  joueur.points = 0;
   joueur.mdp = rand() % 2400 + 1 ;
   joueur.indice = -1;
   // objectif initialisé à 0
@@ -35,11 +34,11 @@ void joueur_simple_tour(Jeu& jeu, JoueurSimple& joueur) {
   if(joueur.chemin_obj.empty() || joueur.chemin_obj.size() == 1) { // Si le chemin vers l'objectif est vide 
     if(joueur.obj.ville1 == 0 && joueur.obj.ville2 == 0) { // Si il n'y a pas d'objectif (ville1=ville2=0) 
       joueur.obj = jeu_pioche_objectif(jeu, joueur.indice, joueur.mdp);
-      std::cout << "Je pioche un objectif car je n'en avais pas avant." << std::endl;
+     if(DEBUG) { std::cout << "Je pioche un objectif car je n'en avais pas avant." << std::endl; }
       joueur.chemin_obj = plus_court_chemin(jeu, joueur.obj, joueur.indice); // on cherche son plus court chemin
     }
     else  { // Si le précédent obj a été rempli
-      std::cout << "Je pioche un objectif car j'ai terminé l'objectif précédent." << std::endl;
+   		if(DEBUG)  { std::cout << "Je pioche un objectif car j'ai terminé l'objectif précédent." << std::endl; }
       // defausse de l'obj
       jeu_defausse_objectif(jeu, joueur.obj, joueur.indice, joueur.mdp);
       // pioche d'un nouvel obj
@@ -49,7 +48,7 @@ void joueur_simple_tour(Jeu& jeu, JoueurSimple& joueur) {
     }
   }
   else { // Sinon, on vérifie si le chemin est encore valide. A TESTER
-    std::cout << " Vérification du chemin " << std::endl;
+  if(DEBUG) {  std::cout << " Vérification du chemin " << std::endl;}
     for(unsigned int i = 0; i < joueur.chemin_obj.size() - 1; i++) { // On parcourt le chemin
       Liaison temp = jeu_liaison(jeu, joueur.chemin_obj[i], joueur.chemin_obj[i+1]);
       if(temp.proprietaire != 0 && temp.proprietaire != joueur.indice) { // Si une des liaisons a un proprietaire different de moi, on cherche un nouveau chemin
@@ -59,40 +58,40 @@ void joueur_simple_tour(Jeu& jeu, JoueurSimple& joueur) {
     }
   }
 
-  std::cout << "Je compte le nombre de carte que j'ai" << std::endl;
+   if(DEBUG) {  std::cout << "Je compte le nombre de carte que j'ai" << std::endl; }
   // Je regarde le nombre de carte wagon nécessite la prochaine liaison
   int ville1 = joueur.chemin_obj.back(); // dernier elem
   int ville2 = joueur.chemin_obj[joueur.chemin_obj.size() - 2]; //Avant dernier elem ON aurait pu faire un truc propre avec un iterateur ? NON : pas de calcul intermédiaire inutile.
   Liaison prochain = jeu_liaison(jeu, ville1, ville2);
-  std::cout << "La liaison que je vais prendre va de " << prochain.ville1 << " à " << prochain.ville2 << " et fait " << prochain.longueur << ". Elle appartient à " << prochain.proprietaire << " et est de la couleur " << prochain.couleur << "." << std::endl;
+  if(DEBUG) {  std::cout << "La liaison que je vais prendre va de " << prochain.ville1 << " à " << prochain.ville2 << " et fait " << prochain.longueur << ". Elle appartient à " << prochain.proprietaire << " et est de la couleur " << prochain.couleur << "." << std::endl; }
 
   while(prochain.proprietaire == joueur.indice) { // Si prochain est à moi, je passe à celle d'après
     joueur.chemin_obj.pop_back();
     if(joueur.chemin_obj.size() == 1) { // Si j'ai fini l'objectif, je termine le tour. On pourrait faire un goto mais on va se faire taper sur les doigts !
-      std::cout << "Mon objectif est terminé ! je vais attendre le prochain tour." << std::endl;
+  if(DEBUG) {      std::cout << "Mon objectif est terminé ! je vais attendre le prochain tour." << std::endl; }
       return;
     }
     ville1 = joueur.chemin_obj.back(); 
     ville2 = joueur.chemin_obj[joueur.chemin_obj.size() - 2]; 
     prochain = jeu_liaison(jeu, ville1, ville2);
-    std::cout << "La liaison que je vais prendre va de " << prochain.ville1 << " à " << prochain.ville2 << " et fait " << prochain.longueur << ". Elle appartient à " << prochain.proprietaire << " et est de la couleur " << prochain.couleur << "." << std::endl;
+   if(DEBUG) {   std::cout << "La liaison que je vais prendre va de " << prochain.ville1 << " à " << prochain.ville2 << " et fait " << prochain.longueur << ". Elle appartient à " << prochain.proprietaire << " et est de la couleur " << prochain.couleur << "." << std::endl; }
   }
   
   // Je compte le nombre de carte de cette couleur que je possède
   for(unsigned int i = 0; i < joueur.wagons.size(); i++) {
-    std::cout << "Comptage de carte : Je cherche des cartes de couleur " << prochain.couleur << " et joueur.wagons["<<i<<"].couleur = " << joueur.wagons[i].couleur << std::endl;
+   if(DEBUG) {   std::cout << "Comptage de carte : Je cherche des cartes de couleur " << prochain.couleur << " et joueur.wagons["<<i<<"].couleur = " << joueur.wagons[i].couleur << std::endl; }
     if(joueur.wagons[i].couleur == prochain.couleur) {
-      std::cout << "    => Donc je l'ajoute !" << std::endl; 
+   if(DEBUG) {     std::cout << "    => Donc je l'ajoute !" << std::endl; }
       nombre_w_p++;
     }
   }
   
   // Si j'ai assez de cartes :
   if(prochain.longueur - nombre_w_p <= 0) {
-    std::cout << "Je possède " << nombre_w_p << " et j'en ai besoin de " << prochain.longueur << "wagons." << std::endl;
+  if(DEBUG) {    std::cout << "Je possède " << nombre_w_p << " et j'en ai besoin de " << prochain.longueur << "wagons." << std::endl; }
     // Je prend la liaison
     jeu_prendre_liaison(jeu, ville1, ville2, joueur.indice, joueur.mdp);
-    std::cout << "Je prends la liaison !" << std::endl;
+   if(DEBUG) {   std::cout << "Je prends la liaison !" << std::endl; }
     // J'enlève les cartes wagons correspondant à mon achat
     // Defaussage des cartes wagons de ma main
     for(unsigned int i = 0; i < joueur.wagons.size(); i++) {
@@ -110,22 +109,23 @@ void joueur_simple_tour(Jeu& jeu, JoueurSimple& joueur) {
         
     // Je l'enlève de ma liste des liaisons à atteindre
     joueur.chemin_obj.pop_back();
-    std::cout << "Liste des liaisons à atteindre :";
+   if(DEBUG) {   std::cout << "Liste des liaisons à atteindre :"; 
     for(unsigned int i = 0; i < joueur.chemin_obj.size(); i++) {
       std::cout << " " << joueur.chemin_obj[i];
-    }
-    std::cout << " et donc joueur.chemin_obj.size() = " << joueur.chemin_obj.size() << std::endl;
+    }}
+  if(DEBUG) {   std::cout << " et donc joueur.chemin_obj.size() = " << joueur.chemin_obj.size() << std::endl;}
   }
   // Sinon
   else {
-    std::cout << "Je possède " << nombre_w_p << " cartes de couleur " << prochain.couleur << " et j'en ai besoin de " << prochain.longueur << std::endl;
+  if(DEBUG) {  std::cout << "Je possède " << nombre_w_p << " cartes de couleur " << prochain.couleur << " et j'en ai besoin de " << prochain.longueur 
+  << std::endl; }
     //     Je parcours les cartes de la pioche découverte
-    for(int i = 0; i < 5; i++) {
-      std::cout << "Je regarde la pioche découverte " << std::endl;
+   for(int i = 0; i < 5; i++) {
+    if(DEBUG) {   std::cout << "Je regarde la pioche découverte " << std::endl;}
       //     Si la carte correspond à la carte que je veux
       Carte temp = jeu_carte_visible(jeu, i);
       if(temp.couleur == prochain.couleur) {
-	std::cout << "    ==> et je trouve la carte que je veux !" << std::endl;
+	 if(DEBUG) { std::cout << "    ==> et je trouve la carte que je veux !" << std::endl; }
 	//          Je la prend
 	joueur.wagons.push_back(jeu_pioche_visible(jeu, i, joueur.indice, joueur.mdp));
 	nb_carte_piochee ++;
@@ -139,9 +139,9 @@ void joueur_simple_tour(Jeu& jeu, JoueurSimple& joueur) {
     
     //     Je pioche 2-nb_carte_piochee déjà prises.
     for(int i = 0 ; i < 2 - nb_carte_piochee ; i++) { // s'éxecute 2, 1 ou 0 fois.
-      std::cout << "Je pioche une carte dans la pioche cachee ! ";
+      if(DEBUG) {  std::cout << "Je pioche une carte dans la pioche cachee ! "; }
       Carte temp = jeu_pioche_cache(jeu, joueur.indice, joueur.mdp);
-      std::cout << "| Verification de la carte : temp.couleur = "<< temp.couleur << std::endl;
+     if(DEBUG) {  std::cout << "| Verification de la carte : temp.couleur = "<< temp.couleur << std::endl; }
       joueur.wagons.push_back(temp);
     }
   }
@@ -185,7 +185,7 @@ liste_liaison plus_court_chemin(Jeu& jeu, const Objectif &obj, const int indice_
   }
   
   // La premiere liaison à effectuer doit être au top du vector
-  std::cout<< "Le chemin allant de "<< obj.ville2 << " à " << obj.ville1 << " est :"; // à l'envers
+   if(DEBUG) { std::cout<< "Le chemin allant de "<< obj.ville2 << " à " << obj.ville1 << " est :";} // à l'envers 
   int prec;
   
   pcc.push_back(obj.ville2);
@@ -195,12 +195,12 @@ liste_liaison plus_court_chemin(Jeu& jeu, const Objectif &obj, const int indice_
     prec = precedent[prec];
   }
   pcc.push_back(prec); // On oublie pas la derniere valeurs.
-
+ if(DEBUG) {
   for(unsigned int i = 0 ; i < pcc.size() ; i++) { // le chemin est bon.
     std::cout << " " << pcc[i];
   }
   std::cout << std::endl;
-
+}
   return pcc;
 }
  

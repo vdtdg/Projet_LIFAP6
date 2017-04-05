@@ -1,6 +1,6 @@
 #ifndef ARAIL_GAME_HPP
 #define ARAIL_GAME_HPP
-
+#define DEBUG 0
 #include "pioche.hpp"
 
 #include <vector>

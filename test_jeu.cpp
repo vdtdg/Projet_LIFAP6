@@ -5,11 +5,12 @@
 #include <iostream>
 #include <fstream>
 
+
 int main(int argc, char** argv) {
   
   //verification qu'un fichier est fourni
   if(argc < 2) {
-    std::cout << "usage : " << argv[0] << " <config file>" << std::endl ;
+ std::cout << "usage : " << argv[0] << " <config file>" << std::endl ;
     return 1 ;
   }
 
@@ -36,7 +37,7 @@ int main(int argc, char** argv) {
 
   //jeu
   for(int i = 0; i < 30; ++i) {
-    std::cout << "----------------Tour n°" << i << "----------------" << std::endl;
+    if(DEBUG) { std::cout << "----------------Tour n°" << i << "----------------" << std::endl; }
     joueur_simple_tour(jeu, joueur) ;
   }
 
