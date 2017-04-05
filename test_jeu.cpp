@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 
   //jeu
   for(int i = 0; i < 30; ++i) {
-    std::cout << "Tour n°" << i << std::endl;
+    std::cout << "----------------Tour n°" << i << "----------------" << std::endl;
     joueur_simple_tour(jeu, joueur) ;
   }
 
