@@ -1,0 +1,26 @@
+[villes]
+A
+B
+C
+D
+E
+
+[couleurs]
+bleu
+vert
+orange
+
+[liaisons]
+0 1 2 1
+1 2 1 1
+2 3 0 1
+3 4 1 1
+0 4 0 150
+
+[objectifs]
+0 4 10
+
+[cartes]
+15
+15
+15
