@@ -59,7 +59,7 @@ void pioche_melange(Pioche& pioche) { // O(n)
   int nb_elt_tas = pioche.tas.size() / pioche.taille_elt;
 
   for (int  i = 0; i < nb_elt_tas; i++) { // O(n) selon cours
-    j = rand() % (nb_elt_tas - 1 - (i - 1));
+    j = rand() % (nb_elt_tas - 1 - (i - 1)); // donc nb_elt_tas - i, mais c'est plus clair comme ça pour la correction.
     memcpy( (void *) temp, (void *) &pioche.tas.at(j*pioche.taille_elt) , pioche.taille_elt);
       
     memcpy( (void *) &pioche.tas.at(j*pioche.taille_elt), (void *) &pioche.tas.at(i*pioche.taille_elt) , pioche.taille_elt);

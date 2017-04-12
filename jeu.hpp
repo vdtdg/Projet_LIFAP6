@@ -1,10 +1,27 @@
 #ifndef ARAIL_GAME_HPP
 #define ARAIL_GAME_HPP
-#define DEBUG 0
-#include "pioche.hpp"
+#define DEBUG 1
+#define JOKER 0
 
+#include "pioche.hpp"
 #include <vector>
 #include <string>
+#include <queue>  // std::priority_queue
+#include <limits> // std::numeric_limits
+
+typedef std::vector<int> liste_liaison;
+
+struct Couple_fp {
+  int ville;
+  int poids;
+} ;
+
+struct Liaison_poids {
+  int ville1;
+  int ville2;
+  int poids;
+} ;
+  
 
 struct Liaison {
   int ville1 ;
@@ -57,7 +74,12 @@ struct Jeu {
   std::vector<int> joueurs ;
   //historique
   std::vector<Action> actions ;
+  int tour;
 } ;
+
+// Ajout d'opération sur les struct.
+bool operator<(const Couple_fp& a, const Couple_fp& b);
+bool operator<(const Liaison_poids& a, const Liaison_poids& b);
 
 //initialisation et destruction de la partie
 
@@ -80,6 +102,10 @@ int jeu_ajout_joueur(Jeu& jeu, int mdp) ;
 void jeu_debut_partie(Jeu& jeu) ;
 
 //interactions avec la partie
+
+void jeu_tour_incremente(Jeu& jeu) ; // incremente le numéro de tour du jeu.
+
+int jeu_get_tour(Jeu& jeu) ; // get jeu.tour
 
 ////informations generales
 

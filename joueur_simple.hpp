@@ -3,12 +3,6 @@
 
 #include "jeu.hpp"
 
-typedef std::vector<int> liste_liaison;
-
-struct Couple_fp {
-  int ville;
-  int poids;
-} ;
   
 struct JoueurSimple {
   std::vector <Carte> wagons;
@@ -42,7 +36,5 @@ void joueur_simple_tour(Jeu& jeu, JoueurSimple& joueur) ;
 // entre les points de l'objectif passé en paramètre.
 liste_liaison plus_court_chemin(Jeu& jeu, const Objectif &obj, const int indice_joueur);
 
-// Organise les couples<ville, poids> dans la file à priorité
-bool operator<(const Couple_fp& a, const Couple_fp& b); 
 
 #endif

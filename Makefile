@@ -1,6 +1,6 @@
 CXX      = g++
 
-SOURCES = pioche.cpp jeu.cpp jeu_io.cpp joueur_simple.cpp
+SOURCES = pioche.cpp jeu.cpp jeu_io.cpp joueur_simple.cpp joueur_organise.cpp
 HEADERS = $(SOURCES:.cpp=.hpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
@@ -19,7 +19,7 @@ PIOCHE_OBJECTS = $(PIOCHE_SOURCES:.cpp=.o)
 
 test_pioche : $(PIOCHE_OBJECTS) $(OBJECTS) $(HEADERS)
 	$(CXX) $(PIOCHE_OBJECTS) $(OBJECTS) -o $@ $(LDFLAGS)
-	
+
 $(PIOCHE_OBJECTS): %.o : %.cpp
 	$(CXX) -c $(CXXFLAGS) $? -o $@
 
@@ -30,7 +30,7 @@ JEU_OBJECTS = $(JEU_SOURCES:.cpp=.o)
 
 test_jeu : $(JEU_OBJECTS) $(OBJECTS) $(HEADERS)
 	$(CXX) $(JEU_OBJECTS) $(OBJECTS) -o $@ $(LDFLAGS)
-	
+
 $(JEU_OBJECTS): %.o : %.cpp
 	$(CXX) -c $(CXXFLAGS) $? -o $@
 

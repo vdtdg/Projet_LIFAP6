@@ -1,7 +1,22 @@
 #include "jeu.hpp"
 
+
 #include <algorithm>
 #include <iostream>
+
+
+// Ajout
+ 
+// avec l'aide de stackoverflow.com/questions/19535644/how-to-use-the-priority-queue-stl-for-objects
+// Pour les files à priorité d'élément Couple_fp (On veut le plus petit poids)
+bool operator<(const Couple_fp& a, const Couple_fp& b) {
+  return a.poids > b.poids; // Ainsi, la plus petite priorité sera au sommet de la file.
+}
+
+// Pour les files à priorité d'élément Liaison_poids (On veut le plus gros poids)
+bool operator<(const Liaison_poids& a, const Liaison_poids& b) {
+  return a.poids < b.poids; // Ainsi, la plus petite priorité sera au sommet de la file.
+}
 
 //initialisation et destruction de la partie
 
@@ -20,6 +35,7 @@ void jeu_init(Jeu& jeu) {
   pioche_init(jeu.objectifs, sizeof(Objectif)) ;
   //ajout d'un joueur fictif car 0 => pas de joueur
   jeu.joueurs.push_back(0) ;
+  jeu.tour = 0;
 }
 
 void jeu_suppr(Jeu& jeu) {
@@ -79,6 +95,14 @@ int jeu_ajout_joueur(Jeu& jeu, int mdp) {
   jeu.joueurs.push_back(mdp) ;
   //index du joueur
   return jeu.joueurs.size() - 1 ;
+}
+
+void jeu_tour_incremente(Jeu& jeu) {
+  jeu.tour = jeu.tour + 1;
+}
+
+int jeu_get_tour(Jeu& jeu) {
+  return jeu.tour;
 }
 
 //fonctions utilitaires pour parcourir les liaisons d'une ville
@@ -212,9 +236,7 @@ Liaison jeu_ville_liaison(const Jeu& jeu, int ville, int index) {
 
 }
 
-void jeu_prendre_liaison(Jeu& jeu, int ville1, int ville2, int joueur, int mdp) {
-  //verification du joueur
-  if(!joueur_check(jeu, joueur, mdp)) return ;
+static void prendre_liaison_oriente(Jeu& jeu, int ville1, int ville2, int joueur) {
   //liaison requete
   Liaison query ;
   query.ville2 = ville2 ;
@@ -230,13 +252,16 @@ void jeu_prendre_liaison(Jeu& jeu, int ville1, int ville2, int joueur, int mdp) 
   if(match != ville_end(jeu, ville1) && match->ville2 == ville2) {
     if(match->proprietaire == 0) {
       match->proprietaire = joueur ;
-      if(ville1 < ville2){
-        log(jeu, PRENDRE_LIAISON, joueur, ville1, ville2) ;
-      } else {
-        jeu_prendre_liaison(jeu, ville2, ville1, joueur, mdp) ;
-      }
     }
   }
+}
+
+void jeu_prendre_liaison(Jeu& jeu, int ville1, int ville2, int joueur, int mdp) {
+  //verification du joueur
+  if(!joueur_check(jeu, joueur, mdp)) return ;
+  prendre_liaison_oriente(jeu, ville1, ville2, joueur) ;
+  prendre_liaison_oriente(jeu, ville2, ville1, joueur) ;
+  log(jeu, PRENDRE_LIAISON, joueur, ville1, ville2) ;
 }
 
 ////cartes
